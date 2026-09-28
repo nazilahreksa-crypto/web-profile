@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Terminal - Sunda Modern</title>
+    <style>
+        /* --- CSS INTERNAL (Desain & Layout) --- */
+        @import url('https://googleapis.com');
+
+        :root {
+            --bg-main: #1e2019;       /* Charcoal hangat, soft & elegan */
+            --bg-terminal: #2b2d24;   /* Warna batu alam / lumut tua soft */
+            --terminal-header: #373a30; /* Hijau kecokelatan kalem */
+            --text-primary: #e6dfd3;   /* Warna pasir / ivory (sangat lembut di mata) */
+            --accent-green: #98b080;   /* Hijau daun muda soft */
+            --accent-gold: #d4af37;    /* Kuning emas keraton untuk highlight */
+            --text-muted: #a39e93;     /* Warna abu-abu kecokelatan untuk info sekunder */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container Terminal Utama */
+        .terminal-window {
+            width: 100%;
+            max-width: 850px;
+            background-color: var(--bg-terminal);
+            border: 1px solid rgba(230, 223, 211, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        /* Header Terminal */
+        .terminal-header {
+            background-color: var(--terminal-header);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(230, 223, 211, 0.1);
+        }
+
+        .window-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        .dot-1 { background-color: #e76f51; }
+        .dot-2 { background-color: #f4a261; }
+        .dot-3 { background-color: #2a9d8f; }
+
+        .window-title {
+            flex-grow: 1;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* Isi Jendela Terminal */
+        .terminal-body {
+            padding: 30px;
+            font-family: 'Fira Code', monospace;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Layout Profile: Foto + Info Utama */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (min-width: 600px) {
+            .profile-section {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        /* Frame Foto Profil Sunda Modern */
+        .photo-frame {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            border: 2px solid var(--accent-green);
+            padding: 6px;
+            background: transparent;
+            border-radius: 8px; /* Tampilan modern clean */
+            flex-shrink: 0;
+            margin: 0 auto;
+        }
+
+        /* Ornamen Sudut Simbolis Kujang Modern */
+        .photo-frame::before, .photo-frame::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--accent-gold);
+        }
+        .photo-frame::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .photo-frame::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            background-color: var(--terminal-header); /* Placeholder jika gambar belum diisi */
+        }
+
+        /* Informasi Utama di sebelah foto */
+        .profile-meta {
+            text-align: center;
+        }
+
+        @media (min-width: 600px) {
+            .profile-meta {
+                text-align: left;
+            }
+        }
+
+        .meta-line {
+            margin-bottom: 6px;
+        }
+
+        .label { color: var(--text-muted); }
+        .value { color: var(--accent-gold); font-weight: bold; }
+
+        /* Output Area untuk Teks Mengetik */
+        .output-area {
+            border-top: 1px dashed rgba(230, 223, 211, 0.15);
+            padding-top: 20px;
+            min-height: 150px;
+            white-space: pre-wrap;
+        }
+
+        .accent-text {
+            color: var(--accent-green);
+        }
+
+        /* Prompt Input & Kursor Aktif */
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            color: var(--accent-green);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 17px;
+            background-color: var(--text-primary);
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-window">
+        <!-- Header Jendela -->
+        <div class="terminal-header">
+            <div class="window-buttons">
+                <span class="dot dot-1"></span>
+                <span class="dot dot-2"></span>
+                <span class="dot dot-3"></span>
+            </div>
+            <div class="window-title">urang-sunda@portfolio:~</div>
+        </div>
+
+        <!-- Isi Konten Terminal -->
+        <div class="terminal-body">
+            
+            <!-- Bagian Atas: Frame Foto & Meta Data -->
+            <div class="profile-section">
+                <div class="photo-frame">
+                    <!-- Ganti 'profile.jpg' dengan nama file foto Anda nanti, atau gunakan link URL -->
+                    <img src="https://unsplash.com" alt="Foto Profil">
+                </div>
+                <div class="profile-meta">
+                    <div class="meta-line"><span class="label">Nami &nbsp;&nbsp;&nbsp;:</span> <span class="value">[Nama Lengkap Anda]</span></div>
+                    <div class="meta-line"><span class="label">Profesi :</span> <span class="value">Modern Web Developer</span></div>
+                    <div class="meta-line"><span class="label">Lembur  :</span> <span class="value">Bandung, Jawa Barat</span></div>
+                </div>
+            </div>
+
+            <!-- Bagian Bawah: Animasi Teks Mengetik -->
+            <div class="output-area">
+                <span class="accent-text">guest@sunda-modern:~\$</span> cat profil_lengkap.sh
+                <div id="typing-destination" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- Baris Input Aktif -->
+            <div class="input-line">
+                <span>guest@sunda-modern:~\$</span>
+                <span class="cursor"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- --- JAVASCRIPT INTERNAL (Efek Mengetik) --- -->
+    <script>
+        // Teks interaktif bertema profesional dengan sapaan hangat Sunda
+        const teksProfil = `Sampurasun! 🙏
+Selamat datang di ruang digital saya.
+
+Saya adalah seorang Web Developer yang memadukan filosofi lokal "Silih Asih, Silih Asgah, Silih Asuh" ke dalam kode pemrograman yang bersih, terstruktur, dan berorientasi pada solusi nyata.
+
+[ RUNTUYAN KEAHLIAN / SKILLS ]
+--------------------------------------------------
+• Front-End : HTML5 | CSS3 Grid & Flexbox | Modern JavaScript
+• Keahlian  : Responsive Web Design | UI/UX Clean Style
+• Tools     : Git | GitHub Pages | VS Code
+
+Saat ini saya fokus membangun pengalaman web yang estetik dan interaktif. Mari berkolaborasi untuk mewujudkan ide digital Anda!`;
+
+        const kontainerTeks = document.getElementById("typing-destination");
+        let indeksKarakter = 0;
+        const kecepatanKetik = 30; // Kecepatan mengetik (milidetik per huruf)
+
+        function mulaiKetik() {
+            if (indeksKarakter < teksProfil.length) {
+                // Menambahkan karakter satu per satu
+                kontainerTeks.innerHTML += teksProfil.charAt(indeksKarakter);
+                indeksKarakter++;
+                setTimeout(mulaiKetik, kecepatanKetik);
+            }
+        }
+
+        // Menjalankan fungsi otomatis saat halaman selesai dimuat
+        window.onload = mulaiKetik;
+    </script>
+</body>
+</html>
